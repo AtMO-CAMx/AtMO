@@ -1,0 +1,159 @@
+1. Download and install Portland Group Fortran compiler
+                a) https://www.pgroup.com/products/community.htm to /usr/local/src
+                b) installation directory /usr/local/pgi_CE_2018
+                c) create links for easier access 
+                                ln -sv /usr/local/pgi_CE_2018 /usr/local/pgi
+                                cd /usr/local/pgi
+                                ln -sv linux86-64/bin .
+                                ln -sv linux86-64/lib .
+                                ln -sv linux86-64 linux86-32
+                d) add path to default shell configuration files
+                                to /etc/csh.cshrc add lines
+                                setenv PGI /usr/local/pgi
+                                setenv path ($path $PGI/bin)
+                                setenv LM_LICENSE_FILE $PGI/license.dat
+
+                                to /etc/profile add lines
+                                PGI=/usr/local/pgi
+                                export PGI=/usr/local/pgi
+                                path=$PATH:$PGI/bin
+                                export path=$PATH:$PGI/bin
+                                LM_LICENSE_FILE=$PGI/license.dat
+
+2. Build NetCDF with compression
+                a) download all necessary packages and place in /usr/local/src
+                                zlib-1.2.11.tgz
+                                hdf5-1.10.5.tar.gz
+                                netcdf-4.4.1.1.tar.gz
+                                netcdf-fortran-4.4.4.tar.gz
+                b) build zlib 
+                                cd /usr/local/src
+                                tar xvzf zlib-1.2.11.tgz
+                                cd zlib-1.2.11
+                                mkdir /usr/local/zlib-1.2.11
+                                ./configure --prefix=/usr/local/zlib-1.2.11
+                                make
+                                make install
+                c) build hdf5
+                                cd /usr/local/src
+                                tar xvzf hdf5-1.10.5.tar.gz
+                                cd hdf5-1.10.5
+                                mkdir /usr/local/hdf5-1.10.5
+                                setenv LDFLAGS -L/usr/local/zlib-1.2.11
+                                setenv FC pgf90
+                                ./configure --prefix=/usr/local/hdf5-1.10.5 --enable-fortran
+                                make
+                                make install
+                d) build NetCDF C-library
+                                cd /usr/local/src
+                                cd netcdf-4.4.1.1
+                                mkdir /usr/local/netcdf-4.4.1.1
+                                setenv CFLAGS -I/usr/local/hdf5-1.10.5/include
+                                setenv LDFLAGS -L/usr/local/hdf5-1.10.5/lib
+                                setenv FC pgf90
+                                ./configure --prefix=/usr/local/netcdf-4.4.1.1
+                                make
+                                make install
+                e) build NetCDF FORTRAN-library
+                                cd /usr/local/src
+                                tar xvzf netcdf-fortran-4.4.4.tar.gz
+                                cd netcdf-fortran-4.4.4
+                                setenv CPPFLAGS -I/usr/local/netcdf-4.4.1.1/include
+                                setenv LDFLAGS -L/usr/local/netcdf-4.4.1.1/lib
+                                setenv LD_LIBRARY_PATH /usr/local/netcdf-4.4.1.1/lib
+                                setenv FC pgf90
+                                ./configure --prefix=/usr/local/netcdf-4.4.1.1
+                                make
+                                make install
+
+3. Build IOAPI
+                a) build legacy version of NetCDF C-library without compression
+                                build C libraries
+                                download netcdf-4.1.3.tgz to /usr/local/src
+                                cd /usr/local/src
+                                tar xvzf netcdf-4.1.3.tgz
+                                setenv FC pgf90
+                                setenv CC gcc
+                                setenv CXX gcc
+                                ./configure --prefix=INSTDIR/netcdf-4.1.3 --disable-dap --enable-static --disable-shared --disable-netcdf-4
+                                make
+                                make install
+                b) build NetCDF FORTRAN-library without compression
+                                cd /usr/local/src
+                                cd netcdf-fortran-4.4.4
+                                make clean
+                                setenv CPPFLAGS -I/usr/local/netcdf-4.1.3/include
+                                setenv LDFLAGS -L/usr/local/netcdf-4.1.3/lib
+                                setenv LD_LIBRARY_PATH /usr/local/netcdf-4.1.3/lib
+                                setenv FC pgf90
+                                ./configure --prefix=/usr/local/netcdf-4.1.3
+                                make
+                c) get directories ready for IOAPI build
+                                cd /usr/local/src
+                                tar xvzf ioapi-3.2.tgz
+                                cd ioapi-3.2
+                                rm -rvf Linux2_x86_64pg_gcc_nomp
+                                mkdir Linux2_x86_64pg_gcc_nomp
+                                cd Linux2_x86_64pg_gcc_nomp
+                                ln -sv /usr/local/netcdf-4.1.3/lib/libnetcdf.a .
+                                ln -sv /usr/local/netcdf-4.1.3/lib/libnetcdff.a .
+                                cd /usr/local
+                                ln -sv /usr/local/src/ioapi-3.2 .
+                d) update Makefiles (if necessary) in IOAPI source code for proper path
+                                cd /usr/local/src/ioapi-3.2
+                                line 134 of Makefile
+                                               BIN        = Linux2_x86_64pg_gcc_nomp
+                                               BASEDIR    = /usr/local/ioapi-3.2
+                                                INSTALL    = /usr/local/ioapi-3.2
+                                line 80 of ioapi/Makefile
+                                               BASEDIR    = /usr/local/ioapi-3.2
+                                                INSTALL    = /usr/local/ioapi-3.2/Linux2_x86_64pg_gcc_nomp
+                                line 38 of ioapi/Makefile
+                                               BASEDIR    = /usr/local/ioapi-3.2
+                e) set environment variable
+                                BIN=Linux2_x86_64pg_gcc_nomp
+                                export BIN
+                f) build the pacakage
+                                make clean
+                                make
+                f) test the build
+                                cd Linux2_x86_64pg_gcc_nomp
+
+4. Download and install MPICH3
+                a) http://www.mpich.org/static/downloads/3.2.1/mpich-3.2.1.tar.gz to /usr/local/src
+                b) cd /usr/local/src
+                c) tar xvzf mpich-3.2.1.tar.gz
+                d) FC=pgf90
+                d) CC=pgcc
+                e) export FC CC
+                d) ./configure --prefix=/usr/local/mpich-3.2.1
+                e) make
+                f) make install
+                g) cd /usr/local
+                h) ln -s /usr/local/mpich-3.2.1 mpich3
+
+5. Download and install Anacaonda version of Python 3.
+                a) mkdir /usr/local/src/anaconda
+                b) cd /usr/local/src/anaconda
+                c) https://repo.anaconda.com/archive/Anaconda3-5.0.0-Linux-x86_64.sh to /usr/local/src/anaconda
+                d) cd /usr/local/src/anaconda
+                e) chmod 777 Anaconda3-5.0.0-Linux-x86_64.sh
+                f) ./Anaconda3-5.0.0-Linux-x86_64.sh
+                g) install directory /usr/local/Anaconda3-5.0
+
+6. Update links to access Python3
+                a) cd /usr/bin
+                b) /usr/local/Anaconda3-5.0/bin/python3.6 .
+
+7. Add necessary python modules using conda installation program
+                a) cd /usr/local/Anaconda3-5.0/bin
+                b) ./conda install netCDF4
+                c) ./conda install pandas
+                e) ./conda install geopandas
+                f) ./conda install scipy
+                g) ./conda install mpl_toolkits
+                h) ./conda install matplotlib
+                i) ./conda install xarray
+                j) ./conda install rtree (there may be others)
+                k) ./conda install PsuedoNetCDF
+                l) ./conda install pandasql
