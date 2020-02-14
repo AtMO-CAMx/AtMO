@@ -1,4 +1,5 @@
 1. EMEP_Regrid.py
+   Note:    The user needs to set an environment variable for PROJ_LIB in their .bashrc. Type `env | grep –i proj` to see what it's set as
    Goal:    Regridding EMEP emission CSV to CAMx 45km, 15km and 3km gridded CSV
    Inputs:  Gridded annual emission CSV downloaded from EMEP
             WRF grid information as cross-reference (/disk4/ATMOVISION/WRF/WRFout/wrfout_d*_camx_20180115.nc)
