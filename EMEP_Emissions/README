@@ -1,0 +1,67 @@
+1. EMEP_Regrid.py
+   Goal:    Regridding EMEP emission CSV to CAMx 45km, 15km and 3km gridded CSV
+   Inputs:  Gridded annual emission CSV downloaded from EMEP
+            WRF grid information as cross-reference (/disk4/ATMOVISION/WRF/WRFout/wrfout_d*_camx_20180115.nc)
+   Method:  Generates polygon shapefiles for both WRF and EMEP grids
+            Processes these grids in order to union/intersect EMEP with WRF cells
+   Outputs: One shapefile per sector per pollutant reprojected in WGS84
+            One annual emission CSV file with the same attributes as in the shapefile
+
+2. EMEP_Annual2Temporal.py
+   Goal:    Converts annual emission CSV to hourly emission CSV
+   Inputs:  Outputs from step 1 -- Gridded annual emission CSV
+            SNAP sector to GNFR sector mapping (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/NFR-CODES)
+            Seasonal factor file by country and GNFR sector (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/SEASONAL-FACS)
+            Weekly factor (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/WEEKLY-FACS)
+            Hourly factor (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/HOURLY-FACS)
+            Country list with country name and country code (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/COUNTRIES-LIST.data)
+            Winter timeshift (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/COUNTRIES-LIST-winter.data)
+            Summer timeshift (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/COUNTRIES-LIST-summer.data)
+   Method:  Generate a dataframe of hourly factors during the year for each grid cell
+            Apply the hourly factor to the annual emission
+   Output:  Gridded temporal emission CSV
+   
+3. EMEP_emis2d_Speciation.py
+   Goal:    Convert surface emission CSV to CAMx-ready 2D NetCDF for surface emission sectors
+   Inputs:  Outputs from step 2 -- Gridded temporal emission CSV for surface emission sectors
+            Speciation factors by pollutant and GNFR sector (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/NFR2CAMx_speciation.csv)
+   Method:  Apply the speciation factor to get the hourly emission for each species.
+            For every 24 hour timestamps, reshape the data to a tdim*xdim*ydim array.
+            Create emission NetCDF with lat, lon, and emission data.
+   Output:  CAMx ready NetCDF for surface emission sectors
+
+4. EMEP_emis3d_Speciation.py
+   Goal:    Convert surface emission CSV to CAMx-ready 3D NetCDF for point emission sectors
+   Inputs:  Outputs from step 2 -- Gridded temporal emission CSV for point emission sectors
+            Speciation factors by pollutant and GNFR sector (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/NFR2CAMx_speciation.csv)
+            Layering factors for each point emission sectors (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/Height_NFR.csv)
+   Method:  Apply the speciation factor to get the hourly emission for each species.
+            At each timestamps, reshape the data to a xdim*ydim array.
+            Apply layering factors to make the data zdim*xdim*ydim.
+            Stack emission arrays of the same day together to make a tdim*zdim*xdim*ydim array.
+            Create emission NetCDF with lat, lon, and emission data.
+   Output:  CAMx-ready 3D NetCDF for point emission sectors
+
+-------------------------------------------------------------------------------------------
+---------------------- Additional NH3 Adjustment For Agricultural Sectors -----------------
+5. EMEP_factor_adjust.py
+   Goal:    Adjust seasonal factors for target countries
+   Inputs:  Seasonal factor file
+            New factors to be used (\\wcnovfps1\Projects\ATMO_CAMx\Emissions\NH3_profile_Backes.xlsx)
+   Method:  Import the original seasonal factor file and replace the values with new values for selected countries
+   Outputs: Adjusted seasonal factor file to be applied to NH3 emissions
+
+6. EMEP_Annual2Temporal_NH3_adj.py  # for agricultural sectors only
+   Goal:    Converts annual emission CSV to hourly emission CSV for agricultural sectors using new NH3 factors
+   Inputs:  Outputs from step 1 -- Gridded annual emission CSV
+            SNAP sector to GNFR sector mapping (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/NFR-CODES)
+            Seasonal factor file by country and GNFR sector (Output from step 5)
+            Weekly factor (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/WEEKLY-FACS)
+            Hourly factor (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/HOURLY-FACS)
+            Country list with country name and country code (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/COUNTRIES-LIST.data)
+            Winter timeshift (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/COUNTRIES-LIST-winter.data)
+            Summer timeshift (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/COUNTRIES-LIST-summer.data)
+   Method:  Generate a dataframe of hourly factors during the year for each grid cell
+            Apply the hourly factor to the annual emission
+   Output:  Gridded temporal emission CSV
+   
