@@ -32,8 +32,8 @@
    Output:  CAMx ready NetCDF for surface emission sectors
 
 4. EMEP_emis3d_Speciation.py
-   Goal:    Convert surface emission CSV to CAMx-ready 3D NetCDF for point emission sectors
-   Inputs:  Outputs from step 2 -- Gridded temporal emission CSV for point emission sectors
+   Goal:    Convert surface emission CSV to CAMx-ready 3D NetCDF for emissions sectors that have a height component
+   Inputs:  Outputs from step 2 -- Gridded temporal emission CSV for emissions sectors that have a height component
             Speciation factors by pollutant and GNFR sector (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/NFR2CAMx_speciation.csv)
             Layering factors for each point emission sectors (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/Height_NFR.csv)
    Method:  Apply the speciation factor to get the hourly emission for each species.
