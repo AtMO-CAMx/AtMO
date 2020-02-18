@@ -10,7 +10,7 @@
 
 2. EMEP_Annual2Temporal.py
    Goal:    Converts annual emission CSV to hourly emission CSV
-   Inputs:  Outputs from step 1 -- Gridded annual emission CSV
+   Inputs:  Outputs from step 1 -- Annual emissions shapefile
             SNAP sector to GNFR sector mapping (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/NFR-CODES)
             Seasonal factor file by country and GNFR sector (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/SEASONAL-FACS)
             Weekly factor (/disk4/ATMOVISION/EMEP2WRF/TEMPORAL_ALLOCATION/WEEKLY-FACS)
