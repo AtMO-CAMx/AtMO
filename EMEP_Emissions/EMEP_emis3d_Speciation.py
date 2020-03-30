@@ -9,6 +9,7 @@ import datetime as dt
 from collections import OrderedDict
 from netCDF4 import Dataset
 
+########################################## User Input ###########################################
 # set NetCDF output format here
 outfmt = 'NETCDF4'
 # Root folder
@@ -25,6 +26,7 @@ year = '2015'
 # Pollutants in the input files
 pollutants = ['CO','NOx','NMVOC','SOx','NH3','PM2_5','PMcoarse','CO'] 
 grid = ['3.0','15.0','45.0'] # WRF RESOLUTION (KM)
+###################################################################################################
 # mole weight of species, to convert g/hr to mol/hr
 molwt = {'NO':30,'NO2':46,'HONO':47,'CO':28,'SO2':64,'SULF':96,'NH3':17,'ETHA':30,'PRPA':44,'PAR':14.3,'ETH':28,'OLE':28,'IOLE':56,'TERP':136,'BENZ':78,'TOL':92,'XYL':106,'ETHY':26,'MEOH':32,'ETOH':46,'FORM':30,'ALD2':44,'ALDX':44,'ACET':58,'KET':28,'NR':44,'IVOA':212}
 
