@@ -36,7 +36,8 @@ proot = "/disk4/ATMOVISION/EMEP2WRF/" #"//dhex4/disk4/ATMOVISION/EMEP2WRF/"
 # Read in speciation file
 SPEC = pd.read_csv(proot+'/TEMPORAL_ALLOCATION/NFR2CAMx_speciation.csv',sep='\t', index_col = "NFR14")
 # Input folder
-pin = "/disk4/ATMOVISION/EMEP2WRF/OUTPUT/2015" #//dhex4/disk4/ATMOVISION/EMEP2WRF/OUTPUT/TEMPORAL"
+pin = "/disk4/ATMOVISION/EMEP2WRF/OUTPUT/2015" 
+# Output folder
 pout = "/disk4/ATMOVISION/EMEP2WRF/OUTPUT/2015/SPECIATED/"+outfmt+'/'
 year = '2015'
 SurfSource = ['C_OtherStationaryComb']#,'D_Fugitive','E_Solvents','F_RoadTransport','I_Offroad','K_AgriLivestock','L_AgriOther','M_Other']
@@ -79,7 +80,7 @@ for grd in grid: # For each grid
         j = 58
         XORIG = -2097000.
         YORIG = -1833900.
-    for day in dates[11:12]:
+    for day in dates:
         print(day)
         jday = dt.datetime.strptime(day,'%Y%m%d').strftime('%Y%j')
         starttime = day+'00'
