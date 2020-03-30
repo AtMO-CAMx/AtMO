@@ -24,7 +24,7 @@ def shp2df(shp):
     return df2
 
 
-###########################################################################################
+####################################### User Inputs ####################################################
 # Define global variables
 MAINDIR = os.path.abspath('')
 TEMPALL = os.path.join(MAINDIR,'TEMPORAL_ALLOCATION')
@@ -39,6 +39,8 @@ NFR = os.path.join(TEMPALL, 'NFR-CODES')
 SEASONAL = os.path.join(TEMPALL, 'SEASONAL-FACS_adjusted.csv')
 HOURLY = os.path.join(TEMPALL, 'HOURLY-FACS')
 WEEKLY = os.path.join(TEMPALL, 'WEEKLY-FACS')
+
+########################################################################################################
 
 country_headers = ['InDomain','ACRONYM','COUNTRYCODE','Name','TimeShift']
 country_list_headers = ['InDomain','ACRONYM','Code','Name','UNKNOWN','MENUT12']
@@ -69,7 +71,7 @@ countries = pd.merge(countries_in,countries,on='COUNTRYCODE',how='inner')
 NFRNAME = nfr.NFRNAME.tolist()
 POL = ['NH3']#['CO','NMVOC','NOx','NH3','PM2_5','PMcoarse','SOx'] #CO
 YR = ['2015']
-GRIDS = ['3.0','15.0']#,'45.0']
+GRIDS = ['3.0','15.0','45.0']
 yr = '2015'
 
 nfr.at[13,'SNAPSECTOR'] = '1,2,3,4,5,6,7,8,9,10'
@@ -88,7 +90,7 @@ weekly = sector2name(weekly,['COUNTRYCODE','NFRNAME'])
 hourly = sector2name(hourly,['WEEKDAY','NFRNAME'])
 seasonal = sector2name(seasonal,['COUNTRYCODE','NFRNAME'])
 
-#############################################################################################
+##################################### Create datetime array ########################################################
 datetimes = []
 Months = (pd.date_range('2015/01/01 00:00:00', freq='M', periods=12)-pd.offsets.MonthBegin(1)).strftime('%Y%m%d').tolist()
 for month in Months:
