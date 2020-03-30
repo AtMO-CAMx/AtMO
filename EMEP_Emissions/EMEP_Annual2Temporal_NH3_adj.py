@@ -25,12 +25,15 @@ def shp2df(shp):
 
 
 ####################################### User Inputs ####################################################
-# Define global variables
+# Input Folder
 MAINDIR = os.path.abspath('')
 TEMPALL = os.path.join(MAINDIR,'TEMPORAL_ALLOCATION')
+
+# Output Folder
 OUTPUT = os.path.join(MAINDIR,'OUTPUT')
 OUTTEMP = os.path.join(OUTPUT,'2015')
 
+# Input data
 COUNTRY_W = os.path.join(TEMPALL, 'COUNTRIES-LIST-winter.data')
 COUNTRY_S = os.path.join(TEMPALL, 'COUNTRIES-LIST-summer.data')
 COUNTRY = os.path.join(TEMPALL, 'COUNTRIES-LIST.data')
