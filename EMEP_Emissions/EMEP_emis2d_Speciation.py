@@ -28,6 +28,7 @@ from collections import OrderedDict
 from netCDF4 import Dataset
 
 ### Created speciated data in gridded form and save it as a netCDF
+########################################### User Inputs ##############################################
 # Output format
 outfmt = 'NETCDF4'#'NETCDF3_CLASSIC'
 # Root folder
@@ -42,6 +43,8 @@ SurfSource = ['C_OtherStationaryComb']#,'D_Fugitive','E_Solvents','F_RoadTranspo
 PtSource = ['A_PublicPower']#,'B_Industry','G_Shipping','H_Aviation','J_Waste']
 pollutants = ['CO','NOx','NMVOC','SOx','NH3','PM2_5','PMcoarse']#,'CO'] # 'PM10',
 grid = ['3.0']#,'15.0','45.0'] # WRF RESOLUTION (KM)
+
+############################################################################################################
 
 molwt = {'NO':30,'NO2':46,'HONO':47,'CO':28,'SO2':64,'SULF':96,'NH3':17,'ETHA':30,'PRPA':44,'PAR':14.3,'ETH':28,
          'OLE':28,'IOLE':56,'TERP':136,'BENZ':78,'TOL':92,'XYL':106,'ETHY':26,'MEOH':32,'ETOH':46,'FORM':30,
