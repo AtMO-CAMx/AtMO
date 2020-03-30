@@ -45,10 +45,11 @@ def shp2df(shp):
 
 
 ############################## USER INPUTS #############################################################
-# Define global variables
-MAINDIR = '/disk4/ATMOVISION/EMEP2WRF'
+# Input folder
+MAINDIR = '/disk4/ATMOVISION/EMEP2WRF' 
 TEMPALL = os.path.join(MAINDIR,'TEMPORAL_ALLOCATION')  # Location of factor inputs
-#OUTPUT = os.path.join(MAINDIR,'OUTPUT')
+
+# Output folder
 OUTTEMP = os.path.join(MAINDIR,'OUTPUT','2015')
 
 # input data to calculate factors
