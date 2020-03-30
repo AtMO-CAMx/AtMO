@@ -81,9 +81,9 @@ hourly = pd.read_csv(HOURLY, sep='\s+', names=hourly_header, index_col=False)
 weekly = pd.read_csv(WEEKLY, sep='\s+', names=weekly_header)
 
 NFRNAME = nfr.NFRNAME.tolist() # All sectors
-POL = ['CO']#,'NH3','NMVOC','NOx','NH3','PM2_5','PMcoarse','SOx'] # All pollutants
-YR = ['2015'] # year
-GRIDS = ['3.0']#,'15.0','45.0'] # All gird sizes
+POL = ['CO','NH3','NMVOC','NOx','NH3','PM2_5','PMcoarse','SOx'] # All pollutants
+#YR = ['2015'] # year
+GRIDS = ['3.0','15.0','45.0'] # All gird sizes
 yr = '2015'
 
 print("Source files imported")
@@ -114,16 +114,16 @@ seasonal = sector2name(seasonal,['COUNTRYCODE','NFRNAME'])
 
 #############################################################################################
 datetimes = []
-Months = (pd.date_range('2015/01/01 00:00:00', freq='M', periods=12)-pd.offsets.MonthBegin(1)).strftime('%Y%m%d').tolist()
+Months = (pd.date_range(yr+'/01/01 00:00:00', freq='M', periods=12)-pd.offsets.MonthBegin(1)).strftime('%Y%m%d').tolist()
 for month in Months:
         Mon = pd.date_range(month, freq='W-MON', periods=2)
         hours = pd.date_range(Mon[1],freq='H',periods=168).strftime('%Y%m%d%H').tolist()
         datetimes+=hours
-DST_start = dt.datetime.strptime('2015032901','%Y%m%d%H')
-DST_end = dt.datetime.strptime('2015102501','%Y%m%d%H')
+DST_start = dt.datetime.strptime(yr+'032901','%Y%m%d%H')
+DST_end = dt.datetime.strptime(yr+'102501','%Y%m%d%H')
 ##############################################################################################    
 starttime = dt.datetime.now()
-for sector in NFRNAME[-2:-1]:
+for sector in NFRNAME:
     # generate factor file for each sector
     factors = countries.copy()
     factors['SECTOR'] = sector
