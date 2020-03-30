@@ -7,13 +7,13 @@ import datetime as dt
 
 # Global variables
 ####################################### User Inputs ################################
-# Paths
+# Input Paths
 MAINDIR = os.path.abspath('')
 TEMPALL = os.path.join(MAINDIR,'TEMPORAL_ALLOCATION')
-OUTPUT = os.path.join(MAINDIR,'OUTPUT')
-OUTTEMP = os.path.join(OUTPUT,'2015')
 SEASONAL = os.path.join(TEMPALL, 'SEASONAL-FACS')
 
+# output path
+OUTPATH = './TEMPORAL_ALLOCATION/SEASONAL-FACS_adjusted.csv'
 # country subject to factor adjustment
 cnty_adj = ['France','Belgium','Netherlands','Luxembourg','Germany','Switzerland','Liechtenstein','Poland','Denmark','Norway','Sweden','Finland','Estonia','Latvia','Lithuania','United_Kingdom','Ireland']
 # new factors to apply
@@ -35,7 +35,7 @@ adj_ind = seasonal_adj.index.to_list()
 seasonal_no_adj = seasonal_w_name.drop(labels=adj_ind)
 seasonal_new = pd.concat([seasonal_no_adj,seasonal_adj]).sort_index()
 seasonal_final = seasonal_new.iloc[:,:-2].drop_duplicates()
-seasonal_final.to_csv('./TEMPORAL_ALLOCATION/SEASONAL-FACS_adjusted.csv',index=False)
+seasonal_final.to_csv(OUTPATH,index=False)
 
 
 
