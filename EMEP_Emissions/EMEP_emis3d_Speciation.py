@@ -179,7 +179,7 @@ for grd in grid: # For each grid
             pout_sec = pout_grd+"/"+secname+'_test'
             if not os.path.exists(pout_grd): os.makedirs(pout_grd)
             if not os.path.exists(pout_sec): os.makedirs(pout_sec)
-            root_grp = Dataset(pout_grd+"/"+secname+"_test/CAMx_"+sector+"_Compressed_3D_"+day+"_"+grd+"km_netcdf4_test.nc", 'w', format=outfmt)
+            root_grp = Dataset(pout_grd+"/"+secname+"_test/CAMx_"+sector+"_Compressed_3D_"+day+"_"+grd+"km_netcdf4.nc", 'w', format=outfmt)
             root_grp.description = "Gridded 3D emissions for CAMx "+sector+" for "+day
 
             ndim = np.shape(data_grid1) # Size of the matrix ndim*ndim

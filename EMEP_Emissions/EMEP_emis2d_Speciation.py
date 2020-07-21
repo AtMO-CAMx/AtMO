@@ -31,17 +31,17 @@ from netCDF4 import Dataset
 # Output format
 outfmt = 'NETCDF4'#'NETCDF3_CLASSIC'
 # Root folder
-proot = "/disk4/ATMOVISION/EMEP2WRF/" #"//dhex4/disk4/ATMOVISION/EMEP2WRF/"
+proot = "/disk4/ATMOVISION/EMEP2WRF/" 
 # Read in speciation file
 SPEC = pd.read_csv(proot+'/TEMPORAL_ALLOCATION/NFR2CAMx_speciation.csv',sep='\t', index_col = "NFR14")
 # Input folder
-pin = "/disk4/ATMOVISION/EMEP2WRF/OUTPUT/2015" #//dhex4/disk4/ATMOVISION/EMEP2WRF/OUTPUT/TEMPORAL"
+pin = "/disk4/ATMOVISION/EMEP2WRF/OUTPUT/2015" 
 pout = "/disk4/ATMOVISION/EMEP2WRF/OUTPUT/2015/SPECIATED/"+outfmt+'/'
 year = '2015'
-SurfSource = ['C_OtherStationaryComb']#,'D_Fugitive','E_Solvents','F_RoadTransport','I_Offroad','K_AgriLivestock','L_AgriOther','M_Other']
-PtSource = ['A_PublicPower']#,'B_Industry','G_Shipping','H_Aviation','J_Waste']
-pollutants = ['CO','NOx','NMVOC','SOx','NH3','PM2_5','PMcoarse']#,'CO'] # 'PM10',
-grid = ['3.0']#,'15.0','45.0'] # WRF RESOLUTION (KM)
+SurfSource = ['C_OtherStationaryComb','D_Fugitive','E_Solvents','F_RoadTransport','I_Offroad','K_AgriLivestock','L_AgriOther','M_Other']
+PtSource = ['A_PublicPower','B_Industry','G_Shipping','H_Aviation','J_Waste']
+pollutants = ['CO','NOx','NMVOC','SOx','NH3','PM2_5','PMcoarse']
+grid = ['3.0','15.0','45.0'] # WRF RESOLUTION (KM)
 
 molwt = {'NO':30,'NO2':46,'HONO':47,'CO':28,'SO2':64,'SULF':96,'NH3':17,'ETHA':30,'PRPA':44,'PAR':14.3,'ETH':28,
          'OLE':28,'IOLE':56,'TERP':136,'BENZ':78,'TOL':92,'XYL':106,'ETHY':26,'MEOH':32,'ETOH':46,'FORM':30,
@@ -76,12 +76,12 @@ for grd in grid: # For each grid
         j = 58
         XORIG = -2097000.
         YORIG = -1833900.
-    for day in dates[11:12]:
+    for day in dates:
         print(day)
         jday = dt.datetime.strptime(day,'%Y%m%d').strftime('%Y%j')
         starttime = day+'00'
         endtime = day+'23'
-        datetimes = pd.date_range(dt.datetime.strptime(starttime,'%Y%m%d%H'), freq='H', periods=24)#.strftime('%Y%m%d%H').tolist()
+        datetimes = pd.date_range(dt.datetime.strptime(starttime,'%Y%m%d%H'), freq='H', periods=24)
         JDAY_S = [x.strftime('%Y%j') for x in datetimes]
         HMS_S = [x.strftime('%H0000') for x in datetimes]
         JDAY_E = [(x+dt.timedelta(hours=1)).strftime("%Y%j") for x in datetimes]
@@ -158,12 +158,10 @@ for grd in grid: # For each grid
             pout_sec = pout_grd+"/"+secname
             if not os.path.exists(pout_grd): os.makedirs(pout_grd)
             if not os.path.exists(pout_sec): os.makedirs(pout_sec)
-            root_grp = Dataset(pout_sec+"/CAMx_"+sector+"_Surface_"+day+"_"+grd+"km_netcdf4_test.nc", 'w',format=outfmt) #format='NETCDF4')
+            root_grp = Dataset(pout_sec+"/CAMx_"+sector+"_Surface_"+day+"_"+grd+"km_netcdf4.nc", 'w',format=outfmt) 
             root_grp.description = "Gridded surface emissions for CAMx "+sector+" for "+day
 
             ndim = np.shape(data_grid1) # Size of the matrix ndim*ndim
-            #xdim = ndim[1]
-            #ydim = ndim[2]
             tdim = ndim[0]
 
             # Set dimensions
